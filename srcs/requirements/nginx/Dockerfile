@@ -1,7 +1,13 @@
 FROM debian:bullseye
 
-RUN apt-get update  && apt-get install -y nginx && rm -f /var/lib/apt/lists/*
+RUN apt-get update  && apt-get install -y \
+    nginx \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
 
-EXPOSE 80
+COPY tools/init.sh /usr/local/bin/inint.sh
+RUN chmod +x /usr/local/bin/init.sh
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 443
+
+ENTRYPOINT ["init.sh"]
